@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile, Query
+from fastapi import FastAPI, File, UploadFile, Query, HTTPException
 from typing import Optional
 from app.models import PredictionResponse
 from app.predict import predict_habitat_placeholder
@@ -29,25 +29,29 @@ async def status():
 @app.post("/predict", response_model=PredictionResponse)
 async def predict(
     # image file to classify
-    file: UploadFile = File(...),  # Image file to classify
+    file: UploadFile = File(..., description="Image of habitat for classification"),  # Image file to classify
 
     # parameters for the prediction
-    habitat_classifications: str = Query("ukhab", regex="^(ukhab|eunis)$"),  # Type of habitat classification to perform
-    top_n: int = Query(3, ge=1,le=3, description="Number of top predictions (1-5)"),  # Number of top predictions to return 
+    habitat_classifications: str = Query("ukhab", regex="^(ukhab|eunis)$",description="Type of habitat classification to perform"), 
+    top_n: int = Query(3, ge=1,le=3, description="Number of top predictions (1-3)"), 
 
     # supplementary parameters
-    latitude: Optional[float] = Query(None, ge=-90, le=90, description="Latitude between -90 and 90"),  # Latitude for geolocation
-    longitude: Optional[float] = Query(None, ge=-180, le=180, description="Longitude between -180 and 180"),  # Longitude for geolocation
-    species_list: Optional[str] = Query(None),  # Comma-separated list of species names for classification 
+    latitude: Optional[float] = Query(None, ge=-90, le=90, description="Latitude between -90 and 90"),
+    longitude: Optional[float] = Query(None, ge=-180, le=180, description="Longitude between -180 and 180"),
+    species_list: Optional[str] = Query(None, description="Comma-separated list of species names to aid classification"), 
 
     # Other parameters for classification
-    model_version: Optional[str] = Query("0.0.1"),  # Version of the model to use, if not supplied, defaults to the latest version
+    model_version: Optional[str] = Query("0.0.1",description="Version of the computer vision model to use, if not supplied, defaults to the latest version"),  # Version of the model to use, if not supplied, defaults to the latest version
 
     # UK Habitat Classification parameters
-    ukhab_predicted_level: int = Query(3, ge = 1, le =5),  # Level of the hierarchy to predict (1-5)
-    ukhab_secondary_codes: Optional[bool] = Query(False)  # Include secondary level for UK habitat classification
+    ukhab_predicted_level: int = Query(3, ge = 1, le =5, description="Level of the UK-Hab hierarchy to predict (1-5)"),
+    ukhab_secondary_codes: Optional[bool] = Query(False, description="Whether to identify and return secondary codes for UK-Hab habitat classification")   
     
     ):
+
+    # raise an error if the file is not an image
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
     
     image_bytes = await file.read()
     result = predict_habitat_placeholder(

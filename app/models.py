@@ -1,39 +1,34 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import List, Optional
 
-# UKHabSecondaryCode model for the API response
 class UKHabSecondaryCode(BaseModel):
-    name: str
-    code: str
-    confidence: Optional[float]
+    name: str = Field(..., description="The name of the secondary habitat code")
+    code: str = Field(..., description="The UKHab code for the secondary habitat")
+    confidence: Optional[float] = Field(None, description="Confidence score for the secondary habitat prediction (0-1)")
 
-# UKHabLevel model for the API response
 class UKHabLevel(BaseModel):
-    uk_hab_level: int #what level of the hierarchy this is
-    code: str # the code for the habitat level e.g. "c1" (a level 3 code)
-    name: str # the name for the habitat level e.g. "Arable and horticulture" (a level 3 code)
-    confidence: Optional[float] # the confidence of the prediction for this level
+    uk_hab_level: int = Field(..., description="The hierarchical level of this habitat (1 to 5)")
+    code: str = Field(..., description="The UKHab code corresponding to this habitat level, e.g., 'c1'")
+    name: str = Field(..., description="The descriptive name of the habitat level, e.g., 'Arable and horticulture'")
+    confidence: Optional[float] = Field(None, description="Confidence score for this habitat level prediction (0-1)")
 
-# UKHab model for the API response
 class UKHab(BaseModel):
-    predicted_level: int # To what level the habitat prediction was requested (1-5)
-    confidence: float # the overall confidence of the prediction
-    rank: int # the rank of the habitat in the prediction (1-5)
-    code: str #the overall code for the habitat eg. "r2a5"
-    name: str # the overall name for the habitat e.g. "Rivers with floating vegetation"
-    definition: str # the definition of the habitat
-    primary_habitat_hierarchy: List[UKHabLevel] # Hierarchy of primary habitats
-    secondary_codes: Optional[List[UKHabSecondaryCode]] = [] # Optional secondary codes for the habitat
-    ukhab_version: str = "2.01"  # Placeholder for UKHab version
+    predicted_level: int = Field(..., description="The requested or predicted habitat level (1 to 5)")
+    confidence: float = Field(..., description="Overall confidence score for this habitat prediction (0-1)")
+    rank: int = Field(..., description="The rank of this prediction among top habitat predictions (1 being highest)")
+    code: str = Field(..., description="The UKHab code representing the full habitat classification, e.g., 'r2a5'")
+    name: str = Field(..., description="The full name of the predicted habitat, e.g., 'Rivers with floating vegetation'")
+    definition: str = Field(..., description="The definition or description of the predicted habitat")
+    primary_habitat_hierarchy: List[UKHabLevel] = Field(..., description="The hierarchical breakdown of the primary habitat classification")
+    secondary_codes: Optional[List[UKHabSecondaryCode]] = Field(default_factory=list, description="Optional list of secondary habitat codes, if applicable")
+    ukhab_version: str = Field("2.01", description="The version of the UKHab classification system used")
 
-# HabitatPrediction model for the API response
 class HabitatPrediction(BaseModel):
-    ukhab: List[UKHab]  # List of UKHab predictions
+    ukhab: List[UKHab] = Field(..., description="List of top-ranked UKHab habitat predictions")
 
-# PredictionResponse model for the API response
 class PredictionResponse(BaseModel):
-    results: HabitatPrediction
-    timestamp: str
-    inference_time_ms: int
-    model_version: str
-    user_message: Optional[str] = None 
+    results: HabitatPrediction = Field(..., description="Container for the habitat prediction results")
+    timestamp: str = Field(..., description="Timestamp of when the prediction was generated")
+    inference_time_ms: int = Field(..., description="Time taken (in milliseconds) to generate the prediction")
+    model_version: str = Field(..., description="Version of the machine learning model used for prediction")
+    user_message: Optional[str] = Field(None, description="Optional message to the user, e.g., warnings or notes")
