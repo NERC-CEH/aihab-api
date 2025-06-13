@@ -31,6 +31,10 @@ async def predict(
     # image file to classify
     file: UploadFile = File(..., description="Image of habitat for classification"),  # Image file to classify
 
+    # date and time of the image capture
+    date_time: Optional[str] = Query(None, description="Date and time of the image capture in ISO 8601 format (e.g., '2023-10-01T12:00:00Z')"),
+    sensor_type: Optional[str] = Query("app", description="Type of sensor used to capture the image (e.g., 'app', 'camera_trap')"),
+
     # parameters for the prediction
     habitat_classifications: str = Query("ukhab", regex="^(ukhab|eunis)$",description="Type of habitat classification to perform"), 
     top_n: int = Query(3, ge=1,le=3, description="Number of top predictions (1-3)"), 
@@ -38,10 +42,10 @@ async def predict(
     # supplementary parameters
     latitude: Optional[float] = Query(None, ge=-90, le=90, description="Latitude between -90 and 90"),
     longitude: Optional[float] = Query(None, ge=-180, le=180, description="Longitude between -180 and 180"),
-    species_list: Optional[str] = Query(None, description="Comma-separated list of species names to aid classification"), 
+    species_list: Optional[str] = Query(None, description="Comma-separated list of species names to aid classification (scientific names, underscore, species level, lower case e.g. 'quercus_robur,salix_alba')"), 
 
     # Other parameters for classification
-    model_version: Optional[str] = Query("0.0.1",description="Version of the computer vision model to use, if not supplied, defaults to the latest version"),  # Version of the model to use, if not supplied, defaults to the latest version
+    model_version: Optional[str] = Query("0.0.1",description="Version of the computer vision model to use, if not supplied, defaults to the latest version"), 
 
     # UK Habitat Classification parameters
     ukhab_predicted_level: int = Query(3, ge = 1, le =5, description="Level of the UK-Hab hierarchy to predict (1-5)"),
@@ -56,6 +60,8 @@ async def predict(
     image_bytes = await file.read()
     result = predict_habitat_placeholder(
         image_bytes,
+        date_time,
+        sensor_type,
         habitat_classifications,
         top_n,
         latitude,

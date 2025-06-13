@@ -7,6 +7,8 @@ from typing import List, Optional
 # Placeholder function to simulate habitat prediction
 def predict_habitat_placeholder(
     image_bytes: bytes,
+    date_time: Optional[str],
+    sensor_type: Optional[str],
     habitat_classifications: str,
     top_n: int,
     latitude: Optional[float],
@@ -27,7 +29,7 @@ def predict_habitat_placeholder(
     if model_version not in ["0.0.1"]:
         raise ValueError("Model version not supported")
     
-
+    # -------------------------
     # placeholder code
     def random_confidence():
         return round(random.uniform(0.5, 0.99), 2)
@@ -209,6 +211,20 @@ def predict_habitat_placeholder(
     for idx, h in enumerate(habitats, start=1):
         h["rank"] = idx
 
+    #--------------------
+    request_metadata = {
+        "habitat_classifications": habitat_classifications,
+        "date_time": date_time,
+        "sensor_type": sensor_type,
+        "top_n": top_n,
+        "latitude": latitude,
+        "longitude": longitude,
+        "species_list": species_list,
+        "model_version": model_version,
+        "ukhab_predicted_level": ukhab_predicted_level,
+        "ukhab_secondary_codes": ukhab_secondary_codes
+    }
+
     #generate response
     response = {
         "results": {
@@ -217,7 +233,8 @@ def predict_habitat_placeholder(
         "timestamp": datetime.now().isoformat(),
         "inference_time_ms": int((time.time() - start_time) * 1000),
         "model_version": model_version,
-        "user_message": "This is a placeholder prediction. Results are randomly generated."
+        "user_message": "This is a placeholder prediction. Results are randomly generated.",
+        "request_metadata": request_metadata
     }
 
     return response
