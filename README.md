@@ -46,17 +46,25 @@ Accepts an image and parameters, returns habitat predictions.
 
 ## Getting Started
 
-1. **Install dependencies:**
+1. **Create and activate a virtual environment:**
    ```sh
-   pip install fastapi uvicorn
+   python -m venv venv
+   venv\Scripts\activate   # On Windows
+   # Or, on macOS/Linux:
+   # source venv/bin/activate
    ```
 
-2. **Run the API:**
+2. **Install dependencies:**
+   ```sh
+   pip install -r requirements.txt
+   ```
+
+3. **Run the API:**
    ```sh
    uvicorn app.main:app --reload
    ```
 
-3. **Access the docs:**
+4. **Access the docs:**
    Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.
 
 ## Notes
