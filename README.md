@@ -9,18 +9,6 @@ This project provides a FastAPI-based web API for habitat classification using A
 - Optional geolocation and species list parameters.
 - Configurable prediction depth and secondary codes for UKHab.
 
-## Project Structure
-
-```
-app/
-  main.py         # FastAPI application and endpoints
-  models.py       # Pydantic models for API responses
-  predict.py      # Placeholder prediction logic
-model/
-tests/
-.gitignore
-```
-
 ## API Endpoints
 
 ### `GET /`
@@ -34,15 +22,21 @@ Accepts an image and parameters, returns habitat predictions.
 
 #### Request Parameters
 
-- `file`: Image file to classify (required)
-- `habitat_classifications`: `"ukhab"` or `"eunis"` (default: `"ukhab"`)
-- `top_n`: Number of top predictions to return (1-3, default: 3)
-- `latitude`: Latitude for geolocation (optional)
-- `longitude`: Longitude for geolocation (optional)
-- `species_list`: Comma-separated species names (optional)
-- `model_version`: Model version (default: `"0.0.1"`)
-- `ukhab_predicted_level`: UKHab hierarchy level (1-5, default: 3)
-- `ukhab_secondary_codes`: Include secondary codes (default: `False`)
+API endoints and their status in development.
+
+- `file`: Image file to classify (required) ✅
+- `date_time`: Date and time of the image capture ❌ (Not implemented in model or API)
+- `sensor_type`: Type of sensor used to capture the image (e.g., 'app', 'camera_trap') ❌ (Not implemented in model or API)
+- `habitat_classifications`: `"ukhab"` or `"eunis"` (default: `"ukhab"`) ✅ (only UK-Hab supported)
+- `top_n`: Number of top predictions to return (1-5, default: 3) ✅
+- `latitude`: Latitude for geolocation (optional) ❌ (Not implemented in model or API)
+- `longitude`: Longitude for geolocation (optional) ❌ (Not implemented in model or API)
+- `species_list`: Comma-separated species names (optional) ❌ (Not implemented in model or API)
+- `model_version`: Model version (optional) ❌ (Not implemented in API)
+- `ukhab_predicted_level`: UKHab hierarchy level (1-5, default: 3) ❌ (Not implemented in model or API, predicts to level 3 irrespective of given value)
+- `ukhab_secondary_codes`: Include secondary codes (default: `False`) ❌ (Not implemented in model or API, returns empty)
+
+For more details run the app and nagivate to `/docs` to read the swagger documentation (https://fastapi.tiangolo.com/reference/openapi/docs/)
 
 ## Getting Started
 
@@ -76,8 +70,3 @@ Accepts an image and parameters, returns habitat predictions.
 
 4. **Access the docs:**
    Open [http://localhost:8000/docs](http://localhost:8000/docs) in your browser.
-
-## Notes
-
-- The current prediction logic is a placeholder and returns randomly generated results.
-- See [`app/main.py`](app/main.py), [`app/models.py`](app/models.py), and [`app/predict.py`](app/predict.py) for implementation details.
