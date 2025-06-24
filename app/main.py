@@ -1,13 +1,24 @@
 from fastapi import FastAPI, File, UploadFile, Query, HTTPException
 from typing import Optional
 from app.models import PredictionResponse
-from app.predict import predict_habitat_placeholder
+from app.predict import predict_habitat, load_model_hf, is_model_loaded
+from contextlib import asynccontextmanager
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # Load the model when the app starts
+    load_model_hf()
+    yield
+    # Cleanup if needed when the app stops (e.g., unload model, close connections)
+    # Currently, no cleanup is required for this simple example.
+    pass
 
 # AI-HAB Habitat Classification API
 # This API provides endpoints for habitat classification using AI models.
 app = FastAPI(
     title="AI-HAB Habitat Classification API",
-    version="0.0.1"
+    version="0.0.1",
+    lifespan=lifespan
 )
 
 # Base url endpoint
@@ -22,7 +33,10 @@ async def info():
 #status endpoint
 @app.get("/status")
 async def status():
-    return {"status": "ok"}
+    if is_model_loaded():
+        return {"status": "ok", "model": "loaded"}
+    else:
+        raise HTTPException(status_code=503, detail="Model not loaded")
 
 
 # Prediction endpoint
@@ -45,7 +59,7 @@ async def predict(
     species_list: Optional[str] = Query(None, description="Comma-separated list of species names to aid classification (scientific names, underscore, species level, lower case e.g. 'quercus_robur,salix_alba')"), 
 
     # Other parameters for classification
-    model_version: Optional[str] = Query("0.0.1",description="Version of the computer vision model to use, if not supplied, defaults to the latest version"), 
+    model_version: Optional[str] = Query(None,description="Version of the computer vision model to use, if not supplied, defaults to the latest version"), 
 
     # UK Habitat Classification parameters
     ukhab_predicted_level: int = Query(3, ge = 1, le =5, description="Level of the UK-Hab hierarchy to predict (1-5)"),
@@ -58,7 +72,7 @@ async def predict(
         raise HTTPException(status_code=400, detail="Uploaded file must be an image.")
     
     image_bytes = await file.read()
-    result = predict_habitat_placeholder(
+    result = predict_habitat(
         image_bytes,
         date_time,
         sensor_type,

@@ -1,0 +1,37 @@
+{
+    "g": {"name":"Grassland","definition":""},
+    "w": {"name":"Woodland and forest","definition":""},
+    "h": {"name":"Heathland and shrub","definition":""},
+    "f": {"name":"Wetland","definition":""},
+    "c": {"name":"Cropland","definition":""},
+    "u": {"name":"Urban","definition":""},
+    "s": {"name":"Sparsely vegetated land","definition":""},
+    "r": {"name":"Rivers and lakes","definition":""},
+    "t": {"name":"Marine inlets and transitional waters","definition":""},
+
+    "g1": {"name":"Acid grassland","definition":""},
+    "g2": {"name": "Calcareous grassland","definition":""},
+    "g3": {"name":"Neutral grassland","definition":""},
+    "g4": {"name":"Modified grassland","definition":""},
+    "w1": {"name":"Broadleaved and mixed woodland","definition":""},
+    "w2": {"name":"Coniferous woodland","definition":""},
+    "h1": {"name":"Dwarf shrub heath","definition":""},
+    "h2": {"name":"Hedgerows","definition":""},
+    "h3": {"name":"Dense scrub","definition":""},
+    "f1": {"name":"Bog","definition":""},
+    "f2": {"name":"Fen marsh and swamp","definition":""},
+    "c1": {"name":"Arable and horticulture","definition":""},
+    "u1": {"name":"Built-up areas and gardens","definition":""},
+    "s1": {"name":"Inland rock","definition":""},
+    "s2": {"name":"Supralittoral Rock","definition":""},
+    "s3": {"name":"Supralittoral Sediment","definition":""},
+    "r1": {"name":"Standing open water and canals","definition":""},
+    "r2": {"name":"Rivers and streams","definition":""},
+    "t1": {"name":"Littoral Rock","definition":""},
+    "t2": {"name":"Littoral Sediment","definition":""},
+
+    "g1c": {"name": "Bracken","definition":""},
+
+    "sea":{"name": "Sea","definition":""},
+    "montane": {"name":"Montane","definition":""}
+}

@@ -59,14 +59,14 @@ Accepts an image and parameters, returns habitat predictions.
    pip install -r requirements.txt
    ```
 
-3. **Get the model from HugginfFace:**
+3. **Get the model from HuggingFace:**
 
-   Generate a Hugging face token: https://huggingface.co/docs/hub/en/security-tokens Fine-grained tokens are more secure.
+   Generate a Hugging face token: https://huggingface.co/docs/hub/en/security-tokens (Fine-grained tokens are more secure).
    
    Create a `.env` file like the following:
    
    ```
-   HF_AUTH_TOKEN = your_token_here
+   HF_AUTH_TOKEN = hf_yourtokenhere
    ```
 
 3. **Run the API:**
