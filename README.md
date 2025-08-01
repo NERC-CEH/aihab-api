@@ -86,3 +86,8 @@ You will then need to add the environment variable using the Posit Connect web i
 
 The model will load on the first predict call.
 
+You can then call the API with using the API key
+
+```
+curl -X 'GET' <api endpoint>/greetings' -H 'accept: application/json' -H "Authorization: Key ${CONNECT_API_KEY}"
+ ``` 

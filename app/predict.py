@@ -10,6 +10,10 @@ import timm
 from PIL import Image
 import io
 from app.get_info import get_habitat_metadata
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
 
 model = None
 device = torch.device("cpu")
