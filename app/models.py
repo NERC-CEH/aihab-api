@@ -32,4 +32,5 @@ class PredictionResponse(BaseModel):
     inference_time_ms: int = Field(..., description="Time taken (in milliseconds) to generate the prediction")
     model_version: str = Field(..., description="Version of the machine learning model used for prediction")
     user_message: Optional[str] = Field(None, description="Optional message to the user, e.g., warnings or notes")
+    gradcam_image: Optional[str] = Field(None, description="Base64-encoded image of the Grad-CAM visualization, if generated")
     request_metadata: dict = Field(..., description="Metadata about the prediction request, including parameters used")

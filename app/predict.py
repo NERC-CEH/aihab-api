@@ -11,6 +11,8 @@ from PIL import Image
 import io
 from app.get_info import get_habitat_metadata
 from dotenv import load_dotenv
+from app.produce_gradcam_image import produce_gradcam
+
 
 # Load environment variables from .env file
 load_dotenv()
@@ -55,7 +57,8 @@ def predict_habitat(
     species_list: Optional[str],
     model_version: Optional[str],
     ukhab_predicted_level: int,
-    ukhab_secondary_codes: Optional[bool]
+    ukhab_secondary_codes: Optional[bool],
+    gradcam: Optional[bool] = False
 ) -> dict:
     
     start_time = time.time()
@@ -117,6 +120,14 @@ def predict_habitat(
     # Convert indices to UKHab labels
     top_labels = [list(labels.keys())[index] for index in top_indices]
 
+
+
+    if gradcam:
+        cam_base64 = produce_gradcam(
+            model=model,
+            image=image,
+        )
+
     # Create a list of habitat predictions
     habitats = []
 
@@ -170,6 +181,7 @@ def predict_habitat(
         "inference_time_ms": int((time.time() - start_time) * 1000),
         "model_version": model_version,
         "user_message": "In development, use with caution.",
+        "gradcam_image": cam_base64 if gradcam else None,
         "request_metadata": request_metadata
     }
 

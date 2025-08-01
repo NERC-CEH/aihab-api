@@ -79,7 +79,7 @@ Install the python package `rsconnect` with `pip install rsconnect`.
 Install a version of Python to match the version of python on Posit Connect (it needs to match or it won't work). If you change to an older version of Python to ensure compatability with the version on Posit Connect then you may need to downgrade the versions of the python packages in the `reqirements.txt` folder. You can then specify the path to the python version with -p.
 
 ```
-rsconnect deploy fastapi -p C:\Users\simrol\AppData\Local\Programs\Python\Python39\python.exe --entrypoint app.main:app ./
+rsconnect deploy fastapi -p C:\Users\simrol\AppData\Local\Programs\Python\Python39\python.exe -x "data/models/*" --entrypoint app.main:app ./
 ```
 
 You will then need to add the environment variable using the Posit Connect web interface: https://docs.posit.co/connect/user/content-settings/#content-vars

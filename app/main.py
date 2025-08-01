@@ -63,7 +63,10 @@ async def predict(
 
     # UK Habitat Classification parameters
     ukhab_predicted_level: int = Query(3, ge = 1, le =5, description="Level of the UK-Hab hierarchy to predict (1-5)"),
-    ukhab_secondary_codes: Optional[bool] = Query(False, description="Whether to identify and return secondary codes for UK-Hab habitat classification")   
+    ukhab_secondary_codes: Optional[bool] = Query(False, description="Whether to identify and return secondary codes for UK-Hab habitat classification"),  
+
+    # gradcam
+    gradcam: Optional[bool] = Query(False, description="Whether to return a Grad-CAM visualization of the model's attention on the image")   
     
     ):
 
@@ -83,6 +86,7 @@ async def predict(
         species_list,
         model_version,
         ukhab_predicted_level,
-        ukhab_secondary_codes)
+        ukhab_secondary_codes,
+        gradcam)
     
     return result
