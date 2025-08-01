@@ -26,7 +26,7 @@ def load_model_hf():
         try:
             login(token)
             # Now create the model without explicitly passing the token.
-            model = timm.create_model(model_name, pretrained=True)
+            model = timm.create_model(model_name, pretrained=True,cache_dir = "data/models")
             model.to(device)
             model.eval()
             return "Logged in successfully and model loaded."
